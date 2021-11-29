@@ -6,10 +6,29 @@ namespace ContaCorrente
     {
         static void Main(string[] args)
         {
-            Conta conta = new Conta(123, 1234);
-            Console.WriteLine(conta.taxaOpp);
+
+            Dividir(5, 0);
+
 
             Console.ReadLine();
+        }
+
+        
+        public static void Dividir(int numero, int divisor)
+        {
+            
+            try
+            {
+                int soma = numero / divisor;
+                Console.WriteLine("o resultado da visisao é:" + soma);
+            }
+            catch (Exception erro)
+            {
+                Console.WriteLine(erro.Message);
+                Console.WriteLine("nao é possivel fazer uma divisao por 0");
+            }
+            
+            
         }
     }
 }

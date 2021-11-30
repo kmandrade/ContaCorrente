@@ -13,16 +13,44 @@ namespace ContaCorrente
         public static int totalContascriadas { get; private set; }
         
         public static double taxaOperacao { get; private set;}
-        public int Agencia { get; set; }
-        public int Numero { get; set; }
+        private readonly int _agencia;
+        public int Agencia
+        {
+            get
+            {
+                return _agencia;
+            }
+        }
+
+
+
+        private readonly int _numero; //somente leitura
+        public int Numero //essa variavel aqui é pra eu poder ler a variavel privada _numero
+        {
+            get
+            {
+                return _numero;
+            }
+        }
+
+
 
         public double taxaOpp { get; set; }
         private double _saldo = 100;
 
         public Conta(int agencia , int numero)
         {
-            this.Agencia = agencia;
-            this.Numero = numero;
+            if (agencia <= 0)
+            {
+                throw new ArgumentException("a agencia deve ser maior que 0");
+            }
+            if (numero <= 0)
+            {
+                throw new ArgumentException("numero deve ser maior que 0");
+            }
+
+            _agencia = agencia;
+            _numero = numero;
             taxaOperacao = 30 / totalContascriadas;
             totalContascriadas++;
         }

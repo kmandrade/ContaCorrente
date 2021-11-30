@@ -6,8 +6,19 @@ namespace ContaCorrente
     {
         static void Main(string[] args)
         {
+            try
+            {
+                Conta conta = new Conta(0, 0);
+                
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-            Dividir(5, 0);
+            
+
+
 
 
             Console.ReadLine();

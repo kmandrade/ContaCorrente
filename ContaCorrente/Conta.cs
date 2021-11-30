@@ -13,7 +13,7 @@ namespace ContaCorrente
         public static int totalContascriadas { get; private set; }
         
         public static double taxaOperacao { get; private set;}
-        private readonly int _agencia;
+        private readonly int _agencia; //somente leitura readonly //aqui eu posso remover o setter e deixar somente o get sem expansao, para o compilador gerar o campo somente leitura
         public int Agencia
         {
             get
@@ -38,21 +38,22 @@ namespace ContaCorrente
         public double taxaOpp { get; set; }
         private double _saldo = 100;
 
-        public Conta(int agencia , int numero)
+        public Conta(int numAgencia , int numConta)
         {
-            if (agencia <= 0)
+            if (numAgencia <= 0)
             {
-                throw new ArgumentException("a agencia deve ser maior que 0");
+                throw new ArgumentException("a agencia deve ser maior que 0", nameof(numAgencia));
             }
-            if (numero <= 0)
+            if (numConta <= 0)
             {
-                throw new ArgumentException("numero deve ser maior que 0");
+                throw new ArgumentException("numero deve ser maior que 0",nameof(numConta));
             }
 
-            _agencia = agencia;
-            _numero = numero;
-            taxaOperacao = 30 / totalContascriadas;
+            _agencia = numAgencia;
+            _numero = numConta;
             totalContascriadas++;
+            taxaOperacao = 30 / totalContascriadas;
+            
         }
         public double getTaxaOperacao()
         {
@@ -79,9 +80,13 @@ namespace ContaCorrente
 
         public bool Sacar(double valor)
         {
+            if (valor < 0)
+            {
+                throw new ArgumentException("valor nao pode ser menor que 0");
+            }
             if (_saldo < valor)
             {
-                return false;
+                throw new SaldoInsuficienteException("Saldo insuficiente para o saque : "+valor);
             }
 
             _saldo -= valor;
@@ -98,10 +103,18 @@ namespace ContaCorrente
         {
             if (_saldo < valor)
             {
-                return false;
+                throw new SaldoInsuficienteException("Saldo insuficiente para a transferencia de : " + valor);
             }
 
-            _saldo -= valor;
+            try
+            {
+                Sacar(valor);
+            }
+            catch (SaldoInsuficienteException e)
+            {
+                throw;
+            }
+
             contaDestino.Depositar(valor);
             return true;
         }
